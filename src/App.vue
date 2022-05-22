@@ -1,17 +1,29 @@
 <template>
   <header>
-    <h2 style="margin: 0;">CountryViewer</h2>
-    <select name="Continent" aria-placeholder="Continent" v-model="this.selectedContinent" @change="filterByContinent">
-      <option value="ALL">All continents</option>
-      <option v-for="continent in continents" :key="continent.name" :value="continent.name">
-        {{ continent.name }}
-      </option>
-    </select>
+    <h2 style="margin: 0;">CountryFinder</h2>
+    <div class="filters">
+      <select name="Continent" placeholder="Continent" v-model="this.selectedContinent">
+        <option value="ALL">All continents</option>
+        <option v-for="continent in continents" :key="continent.name" :value="continent.name">
+          {{ continent.name }}
+        </option>
+      </select>
+      <select name="Languages" placeholder="Languages" v-model="this.selectedLanguage">
+        <option value="">All languages</option>
+        <option v-for="language in languages" :key="language.name" :value="language.name">
+          {{ language.name }}
+        </option>
+      </select>
+      <select name="Multi Languages" placeholder="Multi Languages" v-model="this.selectedNumber">
+        <option value=1>All types</option>
+        <option value=2>Multi languages countries</option>
+
+      </select>
+    </div>
   </header>
   <main>
     <div class="main-container">
-      <div class="country-card" v-for="country in filteredCountries" :key="country">
-        <!-- <p>{{ country.emojiU.replace(/U\+/g, "&#x") }}</p> -->
+      <div class="country-card" v-for="country in filteredCountries" v-show="country.languages.length >= this.selectedNumber" :key="country">
         <p class="country-card-title">{{country.name}}</p>
         <p>Capital: {{country.capital}}</p>
         <p>Continent: {{country.continent.name}}</p>
@@ -29,17 +41,20 @@ import axios from 'axios';
 const API_URL = 'https://countries.trevorblades.com/graphql/';
 const MAIN_QUERY =`
   query {
-        countries {
-          name,
-          capital,
-          continent {name},
-          languages {name},
-          currency,
-          emojiU
-        },
-        continents {
-          name,
-          countries {name}
+    countries {
+      name,
+      capital,
+      continent {name},
+      languages {name},
+      currency,
+      emojiU
+    },
+    continents {
+      name,
+      countries {name}
+    },
+    languages {
+      name
     }
   }
 `
@@ -49,8 +64,10 @@ export default {
     return {
       countries: [],
       continents: [],
+      languages: [],
       selectedContinent: "ALL",
-      filteredCountries: [],
+      selectedLanguage: "",
+      selectedNumber: 1,
     }
   },
   created() {
@@ -68,19 +85,27 @@ export default {
         headers: {"content-type": "application/json"},
         data: allCountriesQuery,
       });
-      const {countries, continents} = result.data.data;
+      const {countries, continents, languages} = result.data.data;
       this.countries = countries;
       this.continents = continents;
+      this.languages = languages;
+
+      console.log(this.countries)
     },
-    filterByContinent() {
-      
-    }
   },
   computed: {
     filteredCountries() {
-      if (this.selectedContinent === "ALL") {
+      if (this.selectedContinent === "ALL" && !this.selectedLanguage) {
         return this.countries;
       }
+      if (this.selectedLanguage) {
+        const filtered = this.countries.filter((element, index) =>
+          element.continent.name === this.selectedContinent
+          && element.languages.includes((index.values().name) === this.selectedLanguage)
+        );
+        return filtered;
+      }
+      
       const filtered = this.countries.filter((element) => element.continent.name === this.selectedContinent);
       return filtered;
     }
@@ -99,6 +124,8 @@ p{
 }
 
 header {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   min-height: 10px;
   padding: 0.5em;
