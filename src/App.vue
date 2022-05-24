@@ -1,6 +1,6 @@
 <template>
 	<header>
-		<h2 style="margin: 0">CountryFinder</h2>
+		<h2 style="margin: 0">Country<span style="color: #00B772">Finder</span></h2>
 		<div class="filters">
 			<select name="Continent" placeholder="Continent" v-model="this.selectedContinent">
 				<option value="">All continents</option>
@@ -19,24 +19,25 @@
 				<option value="2">Multilingual countries</option>
 			</select>
 		</div>
-		<button style="margin-right: 20px;" @click="downloadQueryFile()">Download query (.csv)</button>
+		<button @click="downloadQueryFile()">Download query (.csv)</button>
 	</header>
 	<main>
 		<div class="main-container">
 			<div class="country-card" v-for="country in filteredCountries" v-show="country.languages.length >= this.selectedNumber" :key="country">
 				<p class="country-card-title">{{ country.name }}</p>
-				<p><small>Capital:</small> {{ country.capital }}</p>
-				<p><small>Continent:</small> {{ country.continent.name }}</p>
-				<p>
-					<small>Languages:</small><br /><span v-for="language in country.languages" :key="language">{{ language.name }}<br /></span>
-				</p>
-				<p><small>Currency:</small> {{ country.currency }}</p>
+				<span class="country-card-subtitle">Capital:</span><p><b>{{ country.capital }}</b></p>
+				<span class="country-card-subtitle">Continent:</span><p><span :class="this.formattedContinent(country.continent.name)"><b>{{ country.continent.name }}</b></span></p>
+				<span class="country-card-subtitle">Languages:</span>
+				<div class="country-card-languages">
+					<span class="language-tag" v-for="language in country.languages" :key="language">{{ language.name }}</span>
+				</div>
+				<span class="country-card-subtitle">Currency:</span><p><i>{{ country.currency }}</i></p>
 			</div>
 		</div>
 	</main>
 	<footer>
 		<p>
-			<small>Criado por <a href="https://github.com/murillobazz" target=_blank>Murillo Bazilio</a></small>
+			<small>Created by <a href="https://github.com/murillobazz" target=_blank>Murillo Bazilio</a></small>
 		</p>
 	</footer>
 </template>
@@ -115,6 +116,16 @@ export default {
 			anchor.download = `CountriesQuery_${new Date().toLocaleString()}.csv`;
 			anchor.click();
 		},
+		formattedContinent(continentName) {
+			if (continentName === "Asia") return "orange";
+			if (continentName === "Africa") return "yellow";
+			if (continentName === "Antarctica") return "blue";
+			if (continentName === "Europe") return "burgundy";
+			if (continentName === "North America") return "light-green";
+			if (continentName === "South America") return "dark-green";
+			if (continentName === "Oceania") return "purple";
+			else return "#000000";
+		}
 	},
 	computed: {
 		filteredCountries() {
@@ -139,10 +150,6 @@ export default {
 };
 </script>
 <style scoped>
-body {
-	background-color: #fefefe;
-	margin: 0;
-}
 
 * {
 	font-family: "Roboto", Verdana, Geneva, Tahoma, sans-serif;
@@ -154,11 +161,26 @@ header {
 	justify-content: space-between;
 	width: 100%;
 	padding: 0.5em 1em;
-	background-color: #fff;
+	background-color: #f7f7f7;
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px;
 	position: fixed;
 	top: 0;
 	left: 0;
+}
+
+select {
+	border-radius: 15px;
+	padding: 0 5px;
+}
+
+button {
+	border-radius: 10px;
+	margin-right: 25px;
+	padding: 0 10px;
+	border: solid 1px #ddd;
+	color: #fff;
+	background-color: #00B772;
+	font-weight: bold;
 }
 
 .filters {
@@ -168,24 +190,25 @@ header {
 }
 
 main {
-	padding: 1em;
+	background-color: #fff;
 }
 
 .main-container {
+	padding: 1em;
 	max-width: 100%;
 	margin-top: 2.5em;
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
-	gap: 1ch;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 3ch;
 }
 
 .country-card {
 	display: flex;
 	flex-direction: column;
 	border-radius: 15px;
-	background-color: #fff;
+	background-color: #f7f7f7;
 	padding: 1em;
-	box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .country-card p {
@@ -194,6 +217,34 @@ main {
 
 .country-card-title {
 	font-size: 1.4rem;
+	font-weight: bold;
+	padding-bottom: 10px;
+	border-bottom: solid 1px rgba(0, 183, 114, 0.3);
+}
+
+.country-card-subtitle {
+	font-size: 12px;
+	margin-bottom: 5px;
+}
+
+.country-card-languages {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.5ch;
+	margin-bottom: 10px;
+	max-width: 50px;
+}
+
+.language-tag {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	font-size: 12px;
+	border: solid 1px #00B772;
+	border-radius: 20px;
+	padding: 5px 10px;
+	word-wrap: break-word;
 }
 
 footer {
@@ -201,6 +252,28 @@ footer {
 	margin: 5px 0;
 	display: flex;
 	justify-content: center;
+}
+
+.orange {
+	color: #ff8800;
+}
+.yellow {
+	color: #FBD428;
+}
+.blue {
+	color: #000080;
+}
+.burgundy {
+	color: #c70032;
+}
+.light-green {
+	color: #32CD32;
+}
+.dark-green {
+	color: #006400;
+}
+.purple {
+	color: #4a04a0;
 }
 
 @media (max-width: 767px) {
@@ -219,10 +292,14 @@ footer {
 	}
 
 	.main-container {
-		margin-top: 8em;
-		grid-template-columns: 1fr 1fr;
+		margin-top: 10em;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 0.5ch;
 	}
+
+	.language-tag {
+	padding: 2.5px 5px;
+}
 }
 
 
