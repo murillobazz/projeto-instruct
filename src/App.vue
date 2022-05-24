@@ -36,7 +36,7 @@
 	</main>
 	<footer>
 		<p>
-			<small>Criado por <a href="https://github.com/murillobazz">Murillo Bazilio</a></small>
+			<small>Criado por <a href="https://github.com/murillobazz" target=_blank>Murillo Bazilio</a></small>
 		</p>
 	</footer>
 </template>
