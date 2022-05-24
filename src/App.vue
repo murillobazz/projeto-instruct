@@ -1,45 +1,47 @@
 <template>
-	<header>
-		<h2 style="margin: 0">Country<span style="color: #00B772">Finder</span></h2>
-		<div class="filters">
-			<select name="Continent" placeholder="Continent" v-model="this.selectedContinent">
-				<option value="">All continents</option>
-				<option v-for="continent in continents" :key="continent.name" :value="continent.name">
-					{{ continent.name }}
-				</option>
-			</select>
-			<select name="Languages" placeholder="Languages" v-model="this.selectedLanguage">
-				<option value="">All languages</option>
-				<option v-for="language in languages" :key="language.name" :value="language.name">
-					{{ language.name }}
-				</option>
-			</select>
-			<select name="Multi Languages" placeholder="Multilingual" v-model="this.selectedNumber">
-				<option value="1">All types</option>
-				<option value="2">Multilingual countries</option>
-			</select>
-		</div>
-		<button @click="downloadQueryFile()">Download query (.csv)</button>
-	</header>
-	<main>
-		<div class="main-container">
-			<div class="country-card" v-for="country in filteredCountries" v-show="country.languages.length >= this.selectedNumber" :key="country">
-				<p class="country-card-title">{{ country.name }}</p>
-				<span class="country-card-subtitle">Capital:</span><p><b>{{ country.capital }}</b></p>
-				<span class="country-card-subtitle">Continent:</span><p><span :class="this.formattedContinent(country.continent.name)"><b>{{ country.continent.name }}</b></span></p>
-				<span class="country-card-subtitle">Languages:</span>
-				<div class="country-card-languages">
-					<span class="language-tag" v-for="language in country.languages" :key="language">{{ language.name }}</span>
-				</div>
-				<span class="country-card-subtitle">Currency:</span><p><i>{{ country.currency }}</i></p>
+	<div>
+		<header>
+			<h1 class="title">Country<span class="title" style="color: #00B772">Finder</span></h1>
+			<div class="filters">
+				<select name="Continent" placeholder="Continent" v-model="this.selectedContinent">
+					<option value="">All continents</option>
+					<option v-for="continent in continents" :key="continent.name" :value="continent.name">
+						{{ continent.name }}
+					</option>
+				</select>
+				<select name="Languages" placeholder="Languages" v-model="this.selectedLanguage">
+					<option value="">All languages</option>
+					<option v-for="language in languages" :key="language.name" :value="language.name">
+						{{ language.name }}
+					</option>
+				</select>
+				<select name="Multi Languages" placeholder="Multilingual" v-model="this.selectedNumber">
+					<option value="1">All types</option>
+					<option value="2">Multilingual countries</option>
+				</select>
 			</div>
-		</div>
-	</main>
-	<footer>
-		<p>
-			<small>Created by <a href="https://github.com/murillobazz" target=_blank>Murillo Bazilio</a></small>
-		</p>
-	</footer>
+			<button @click="downloadQueryFile()">Download query (.csv)</button>
+		</header>
+		<section>
+			<div class="main-container">
+				<div class="country-card" v-for="country in filteredCountries" v-show="country.languages.length >= this.selectedNumber" :key="country">
+					<p class="country-card-title">{{ country.name }}</p>
+					<span class="country-card-subtitle">Capital:</span><p><b>{{ country.capital }}</b></p>
+					<span class="country-card-subtitle">Continent:</span><p><span :class="this.formattedContinent(country.continent.name)"><b>{{ country.continent.name }}</b></span></p>
+					<span class="country-card-subtitle">Languages:</span>
+					<div class="country-card-languages">
+						<span class="language-tag" v-for="language in country.languages" :key="language">{{ language.name }}</span>
+					</div>
+					<span class="country-card-subtitle">Currency:</span><p><i>{{ country.currency }}</i></p>
+				</div>
+			</div>
+		</section>
+		<footer>
+			<p>
+				<small>Created by <a href="https://github.com/murillobazz" target=_blank>Murillo Bazilio</a></small>
+			</p>
+		</footer>
+	</div>
 </template>
 
 <script>
@@ -160,7 +162,8 @@ header {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
-	padding: 0.5em 1em;
+	max-width: 100%;
+	padding: 10px;
 	background-color: #f7f7f7;
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px;
 	position: fixed;
@@ -168,12 +171,17 @@ header {
 	left: 0;
 }
 
+.title {
+	font-family: "Quicksand","Roboto", Verdana, Geneva, Tahoma, sans-serif;
+	font-weight: bold;
+}
+
 select {
 	border-radius: 15px;
 	padding: 0 5px;
 }
 
-button {
+header button {
 	border-radius: 10px;
 	margin-right: 25px;
 	padding: 0 10px;
@@ -189,17 +197,18 @@ button {
 	gap: 1ch;
 }
 
-main {
+section {
 	background-color: #fff;
+	max-width: 100%;
 }
 
 .main-container {
 	padding: 1em;
-	max-width: 100%;
-	margin-top: 2.5em;
+	width: fit-content;
+	margin-top: 3.5em;
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 3ch;
+	gap: 2ch;
 }
 
 .country-card {
@@ -279,30 +288,40 @@ footer {
 @media (max-width: 767px) {
 	header {
 		flex-direction: column;
-		gap: 0.5ch;
+		padding: 5px 0;
+		gap: 1ch;
+	}
+
+	.title {
+		align-self: center;
 	}
 
 	header button {
 		align-self: center;
+		margin-right: 0;
+		padding: 5px;
+		font-weight: normal;
 	}
 
 	.filters {
-		flex-direction: column;
-		align-items: center;
+		flex-direction: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.5ch;
+	}
+
+	.filters select {
+		max-width: 100px;
 	}
 
 	.main-container {
-		margin-top: 10em;
+		margin-top: 7em;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 0.5ch;
+		gap: 1ch;
+		padding: 10px;
 	}
 
 	.language-tag {
 	padding: 2.5px 5px;
+	}
 }
-}
-
-
-
-
 </style>
