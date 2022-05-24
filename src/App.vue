@@ -19,21 +19,26 @@
 				<option value="2">Multilingual countries</option>
 			</select>
 		</div>
+		<button style="margin-right: 20px;" @click="downloadQueryFile()">Download query (.csv)</button>
 	</header>
 	<main>
 		<div class="main-container">
 			<div class="country-card" v-for="country in filteredCountries" v-show="country.languages.length >= this.selectedNumber" :key="country">
 				<p class="country-card-title">{{ country.name }}</p>
-				<p>Capital: {{ country.capital }}</p>
-				<p>Continent: {{ country.continent.name }}</p>
+				<p><small>Capital:</small> {{ country.capital }}</p>
+				<p><small>Continent:</small> {{ country.continent.name }}</p>
 				<p>
-					Languages:<br /><span v-for="language in country.languages" :key="language">{{ language.name }}<br /></span>
+					<small>Languages:</small><br /><span v-for="language in country.languages" :key="language">{{ language.name }}<br /></span>
 				</p>
-				<p>Currency: {{ country.currency }}</p>
+				<p><small>Currency:</small> {{ country.currency }}</p>
 			</div>
 		</div>
 	</main>
-	<footer></footer>
+	<footer>
+		<p>
+			<small>Criado por <a href="https://github.com/murillobazz">Murillo Bazilio</a></small>
+		</p>
+	</footer>
 </template>
 
 <script>
@@ -91,6 +96,25 @@ export default {
 			this.continents = continents;
 			this.languages = languages;
 		},
+		downloadQueryFile() {
+			const csvString = [["Name", "Capital", "Continent", "Languages", "Currency"],
+			...this.filteredCountries.map((item) => [
+				item.name,
+				item.capital,
+				item.continent.name,
+				item.languages.map((language) => [language.name]).join("; "),
+				String(item.currency).replaceAll(",", "; ")
+				// Não utilizar o método String() estava retornando um bug quando não utilizávamos nenhum filtro antes de exportar.
+			])];
+			console.log(csvString);
+			const csvContent = "data:text/csv;charset=utf-8," + csvString.map(item => item.join(",")).join("\n");
+			const csvFile = encodeURI(csvContent);
+			const anchor = document.createElement('a');
+			anchor.href = csvFile;
+			anchor.target = "_blank";
+			anchor.download = `CountriesQuery_${new Date().toLocaleString()}.csv`;
+			anchor.click();
+		},
 	},
 	computed: {
 		filteredCountries() {
@@ -114,14 +138,14 @@ export default {
 	},
 };
 </script>
-<style>
+<style scoped>
 body {
 	background-color: #fefefe;
 	margin: 0;
 }
 
-p {
-	font-family: Verdana, Geneva, Tahoma, sans-serif;
+* {
+	font-family: "Roboto", Verdana, Geneva, Tahoma, sans-serif;
 	margin: 0;
 }
 
@@ -129,11 +153,18 @@ header {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
-	min-height: 10px;
-	padding: 0.5em;
+	padding: 0.5em 1em;
 	background-color: #fff;
 	box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px;
 	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+.filters {
+	display: flex;
+	justify-content: center;
+	gap: 1ch;
 }
 
 main {
@@ -141,6 +172,7 @@ main {
 }
 
 .main-container {
+	max-width: 100%;
 	margin-top: 2.5em;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -150,7 +182,6 @@ main {
 .country-card {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	border-radius: 15px;
 	background-color: #fff;
 	padding: 1em;
@@ -164,4 +195,37 @@ main {
 .country-card-title {
 	font-size: 1.4rem;
 }
+
+footer {
+	width: 100%;
+	margin: 5px 0;
+	display: flex;
+	justify-content: center;
+}
+
+@media (max-width: 767px) {
+	header {
+		flex-direction: column;
+		gap: 0.5ch;
+	}
+
+	header button {
+		align-self: center;
+	}
+
+	.filters {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.main-container {
+		margin-top: 8em;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.5ch;
+	}
+}
+
+
+
+
 </style>
