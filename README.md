@@ -1,10 +1,10 @@
-# 🌎 [CountryFinder](https://projeto-instruct.vercel.app/)
+# 🌎 [CountryFinder](https://countryfinder-instruct.vercel.app/)
 
 <small><i>(Este projeto foi feito por Murillo Bazilio, para participação no processo seletivo da Instruct.)</i></small>
 
 ## 📘 Descrição
 
-  O 🌎 [CountryFinder](https://projeto-instruct.vercel.app/) foi uma solução pensada para o problema proposto no teste do processo seletivo da Instruct. O problema girava em torno de uma empresa que precisaria de uma aplicação para visualizar dados de diversos países que seriam captados à partir da [Countries GraphQL API](https://countries.trevorblades.com/graphql).
+  O 🌎 [CountryFinder](https://countryfinder-instruct.vercel.app/) foi uma solução pensada para o problema proposto no teste do processo seletivo da Instruct. O problema girava em torno de uma empresa que precisaria de uma aplicação para visualizar dados de diversos países que seriam captados à partir da [Countries GraphQL API](https://countries.trevorblades.com/graphql).
 
 Por se tratar de uma aplicação de consulta, a mesma foi feita com baixo uso de dependências/pacotes externos, tentando alcançar um alto nível de performance.
 
@@ -28,7 +28,7 @@ Por se tratar de uma aplicação de consulta, a mesma foi feita com baixo uso de
 
   A aplicação foi feita utilizando [Vue 3](https://vuejs.org/), que teve como ponto de partida o CLI do [Vite](https://vitejs.dev/). É executada sobre [Node.js](https://nodejs.org/en/). O único pacote importado durante o desenvolvimento foi o [Axios](https://axios-http.com/), para fazer as chamadas para a [Countries GraphQL API](https://countries.trevorblades.com/graphql).
 
-  A aplicação está disponível através de deploy no [Vercel](https://vercel.com/), você pode acessar clicando aqui -> [CountryFinder](https://projeto-instruct.vercel.app/)
+  A aplicação está disponível através de deploy no [Vercel](https://vercel.com/), você pode acessar clicando aqui -> [CountryFinder](https://countryfinder-instruct.vercel.app/)
 <br>
 
 ### Para rodar essa aplicação localmente (considerando que você tenha permissão de acesso):
