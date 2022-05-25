@@ -204,7 +204,7 @@ section {
 
 .main-container {
 	padding: 1em;
-	width: fit-content;
+	max-width: 100%;
 	margin-top: 3.5em;
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
