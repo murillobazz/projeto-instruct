@@ -47,3 +47,8 @@ $ yarn dev
 
 # O servidor inciará na porta:3000 - acesse <http://localhost:3000>
 ```
+<hr>
+
+## 👨‍💻 Como usar
+
+  Ao acessar o site da aplicação você verá cards de todos países disponíveis através da API. Você pode utilizar o filtro de continentes para visualizar países de continentes específicos, o filtro de idiomas, para visualizar países que utilizam idiomas específicos e, também, poderá utilizar o filtro visual de países que falam mais de um idioma. Ao final de sua filtragem, você pode utilizar o botão "Download query" para fazer o download de uma planilha (.csv) contendo os dados dos países filtrados.
