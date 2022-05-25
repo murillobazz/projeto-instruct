@@ -10,6 +10,7 @@ Por se tratar de uma aplicação de consulta, a mesma foi feita com baixo uso de
 
 <br>
   O projeto deveria contar com os seguintes requisitos:
+  
 - [x] Um filtro de continente, obrigatório, que determina quais países são listados;
 - [x] Um filtro de países com mais de um idioma, opcional;
 - [x] Um filtro por idioma, também opcional.
